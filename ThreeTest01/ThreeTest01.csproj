@@ -51,6 +51,8 @@
     <Content Include="GreenSock\TimelineMax.min.js" />
     <Content Include="GreenSock\TweenLite.min.js" />
     <Content Include="GreenSock\TweenMax.min.js" />
+    <Content Include="TargetReticle.js" />
+    <Content Include="TargetReticle.ts" />
     <Content Include="Three\three.d.ts" />
   </ItemGroup>
   <ItemGroup>

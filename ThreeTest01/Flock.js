@@ -8,15 +8,6 @@ var Flock = (function () {
             color: 0xFF0000
         });
         this.projector = new THREE.Projector();
-        /*
-        this.boids.forEach((b) => {
-        b = new Boid((Math.random() - 0.5) * 150,
-        (Math.random() - 0.5) * 150,
-        (Math.random() - 0.5) * 150);
-        
-        b.setMaterial(this.material);
-        });
-        */
         for(var i = 0; i < 300; i++) {
             this.boids.push(new Boid((Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400));
         }
@@ -110,9 +101,10 @@ var Boid = (function () {
         this.applyForce(new THREE.Vector3(-0.012, -0.012, -0.012));
         //*****************************************************************
         if(this.isPressed) {
-            var snk = this.sink(this.sinkV);
+            //var snk = this.sink(this.sinkV);
             //var snk = this.sink(new THREE.Vector3(0, 0, 0));
-            this.applyForce(snk);
+            //this.applyForce(snk);
+            this.applyForce(this.sink(this.sinkV));
         }
     };
     Boid.prototype.update = function () {

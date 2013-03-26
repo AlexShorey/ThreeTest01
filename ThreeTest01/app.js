@@ -1,6 +1,7 @@
 ///<reference path='Three/three.d.ts' />
 ///<reference path='GreenSock/greensock.d.ts' />
 ///<reference path='Flock.ts' />
+///<reference path='TargetReticle.ts' />
 var UpdateHook = (function () {
     function UpdateHook(e) {
         this.element = e;
@@ -87,7 +88,6 @@ var ThreeObj = (function () {
         return m;
     };
     ThreeObj.prototype.spaceToScreen = function (v) {
-        //v = v.subVectors(this.camera.position, v);
         v = this.projector.projectVector(v, this.camera);
         v.x = v.x * window.innerWidth / 2 + window.innerWidth / 2;
         v.y = window.innerHeight - (v.y * window.innerHeight / 2 + window.innerHeight / 2);
@@ -110,12 +110,24 @@ var ThreeCube = (function () {
 })();
 var hook;
 var threeObj;
+var tgt;
 window.onload = function () {
+    /*
+    include dependencies exclusively from javascript.
+    Doesn't work yet because objects are declared before
+    resources are referenced.
+    
+    var ref = <HTMLScriptElement>document.createElement("script");
+    ref.type = 'text/javascript';
+    ref.src = "<script src='TargetReticle.js'></script>";
+    document.body.appendChild(ref);
+    */
     var el = document.getElementById('content');
     hook = new UpdateHook(el);
     hook.start();
     threeObj = new ThreeObj();
     threeObj.draw();
+    tgt = new TargetReticle();
     //set global even subscribers
     document.onmousedown = function (e) {
         return mouseDown(e);
@@ -129,9 +141,18 @@ window.onload = function () {
     window.onresize = function (e) {
         return windowResize(e);
     };
+    updateElements();
 };
+function updateElements() {
+    tgt.setPos(threeObj.spaceToScreen(threeObj.flock.boids[100].mesh.position.clone()));
+    window.requestAnimationFrame(function () {
+        return updateElements();
+    });
+}
 function windowResize(e) {
     threeObj.onResize(e);
+    var skizzle = document.getElementById('tRet');
+    console.log('target top: ' + skizzle.style.top);
 }
 function mouseDown(e) {
     threeObj.onMouseDown(e);

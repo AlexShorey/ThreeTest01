@@ -1,6 +1,7 @@
 ///<reference path='Three/three.d.ts' />
 ///<reference path='GreenSock/greensock.d.ts' />
 ///<reference path='Flock.ts' />
+///<reference path='TargetReticle.ts' />
 
 class UpdateHook {
     element: HTMLElement;
@@ -143,8 +144,20 @@ class ThreeCube {
 
 var hook: UpdateHook;
 var threeObj: ThreeObj;
+var tgt: TargetReticle;
 
 window.onload = () => {
+    /*
+    include dependencies exclusively from javascript.
+    Doesn't work yet because objects are declared before 
+    resources are referenced.
+
+    var ref = <HTMLScriptElement>document.createElement("script");
+    ref.type = 'text/javascript';
+    ref.src = "<script src='TargetReticle.js'></script>";
+    document.body.appendChild(ref);
+    */
+
     var el = document.getElementById('content');
     hook = new UpdateHook(el);
     hook.start();
@@ -152,15 +165,28 @@ window.onload = () => {
     threeObj = new ThreeObj();
     threeObj.draw();
 
+    tgt = new TargetReticle();
+    
+
     //set global even subscribers
     document.onmousedown = (e) => mouseDown(e);
     document.onmousemove = (e) => mouseMove(e);
     document.onmouseup   = (e) => mouseUp(e);
-    window.onresize      = (e) => windowResize(e);
+    window.onresize = (e) => windowResize(e);
+
+    updateElements();
 };
+
+function updateElements() {
+    tgt.setPos(threeObj.spaceToScreen(threeObj.flock.boids[100].mesh.position.clone()));
+
+    window.requestAnimationFrame(() => updateElements());
+}
 
 function windowResize(e:UIEvent) {
     threeObj.onResize(e);
+    var skizzle = document.getElementById('tRet');
+    console.log('target top: ' + skizzle.style.top);
 }
 
 function mouseDown(e: MouseEvent) {

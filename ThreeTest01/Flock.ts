@@ -13,15 +13,7 @@ class Flock {
         this.boids = [];
         this.material = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
         this.projector = new THREE.Projector();
-        /*
-        this.boids.forEach((b) => {
-            b = new Boid((Math.random() - 0.5) * 150,
-                         (Math.random() - 0.5) * 150,
-                         (Math.random() - 0.5) * 150);
 
-            b.setMaterial(this.material);
-        });
-        */
         for (var i = 0; i < 300; i++) {
             this.boids.push(new Boid((Math.random() - 0.5) * 400,
                                      (Math.random() - 0.5) * 400,
@@ -151,16 +143,11 @@ class Boid {
         //*****************************************************************
 
         if (this.isPressed) {
-            var snk = this.sink(this.sinkV);
-            //var snk = this.sink(new THREE.Vector3(0, 0, 0));
-            this.applyForce(snk);
+            this.applyForce(this.sink(this.sinkV));
         }
     }
 
     update() {
-
-        //if (this.isPressed)
-          //  this.acceleration.add(this.sink(new THREE.Vector3(0, 0, 0)));
 
         this.velocity.add(this.acceleration);
 
@@ -168,14 +155,10 @@ class Boid {
             this.velocity.setLength(this.maxspeed);
         }
 
+        // clamp doesn't do what i thought it did
         //this.velocity.clamp(new THREE.Vector3(0, 0, 0),
         //                   new THREE.Vector3(this.maxspeed, this.maxspeed, this.maxspeed));
-        /*
-        if (this.isPressed) {
-            this.velocity.add(this.sink(new THREE.Vector3(0, 0, 0)));
-            console.log("hit");
-        }
-        */
+
         this.location.add(this.velocity);
         this.acceleration.multiplyScalar(0);
     }
@@ -183,7 +166,6 @@ class Boid {
     seek(target: THREE.Vector3): THREE.Vector3 {
         var desired = new THREE.Vector3();
         desired.subVectors(target, this.location);
-        //var desired = target.sub(this.location);
 
         desired.normalize();
         desired.multiplyScalar(this.maxspeed);
@@ -197,8 +179,6 @@ class Boid {
     }
 
     render() {
-        //var lookDir = new THREE.Vector3();
-        //this.velocity.copy(lookDir);
         this.mesh.position = this.location;
         this.mesh.lookAt(new THREE.Vector3().addVectors(this.mesh.position, this.velocity));
     }
