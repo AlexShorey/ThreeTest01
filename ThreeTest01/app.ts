@@ -44,10 +44,10 @@ class ThreeObj {
 
     theCube: ThreeCube;
     flock: Flock;
-    mouseV: THREE.Vector3;
 
     theLight: THREE.PointLight;
-    //otherlight: THREE.PointLight;
+
+    trackedPt: THREE.Vector3;
 
     constructor() {
         this.element = document.getElementById('webglDiv');
@@ -62,22 +62,20 @@ class ThreeObj {
         document.body.appendChild(this.renderer.domElement);
         this.renderer.domElement.id = "glid";
 
-        ///this.renderer.domElement.id = ....
-
-        this.theCube = new ThreeCube();
         this.flock = new Flock();
         this.flock.camera = this.camera;
-        this.flock.boids.forEach((b) => { this.scene.add(b.mesh); });
-        //this.theCube.startUpdating();
-        this.scene.add(this.theCube.mesh);
+        
+        this.theCube = new ThreeCube();
+        
         this.theLight = new THREE.PointLight(0xffffff);
         this.theLight.position.y = 300;
         this.theLight.position.z = 500;
+
+        this.scene.add(this.theCube.mesh);
         this.scene.add(this.theLight);
-
-        this.mouseV = new THREE.Vector3(0, 0, 0.5);
-
-        //window.onresize = (e) => this.onResize(e);
+        this.flock.boids.forEach((b) => {
+            this.scene.add(b.mesh);
+        });
     }
 
     onMouseDown(e: MouseEvent) {
@@ -85,7 +83,7 @@ class ThreeObj {
     }
 
     onMouseMove(e: MouseEvent) {
-        this.theCube.mesh.position = this.mouseToCamSpace(new THREE.Vector3(e.x, e.y, 0.5), 300);
+        this.theCube.mesh.position = this.screenToSpace(new THREE.Vector3(e.x, e.y, 0.5), 300);
         this.flock.mMove(e);
     }
 
@@ -103,20 +101,29 @@ class ThreeObj {
 
     draw() {
         this.flock.run();
-        this.camera.lookAt(new THREE.Vector3(0,0,0));
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         this.renderer.render(this.scene, this.camera);
 
         window.requestAnimationFrame(() => this.draw());
     }
 
-    mouseToCamSpace(m: THREE.Vector3, d: number): THREE.Vector3 {
+    screenToSpace(m: THREE.Vector3, d: number): THREE.Vector3 {
         m = new THREE.Vector3(2 * m.x / window.innerWidth - 1, 2 * -m.y / window.innerHeight + 1, m.z);
         m = this.projector.unprojectVector(m, this.camera);
         m.subVectors(m, this.camera.position);
         m.normalize();
         m.addVectors(this.camera.position, m.multiplyScalar(d));
         return m;
+    }
+
+    spaceToScreen(v: THREE.Vector3): THREE.Vector3 {
+        v = this.projector.projectVector(v, this.camera);
+        v.x = v.x * window.innerWidth/2 + window.innerWidth/2;
+        v.y = window.innerHeight - (v.y * window.innerHeight / 2 + window.innerHeight / 2);
+        v.z = 0;
+        console.log(v);
+        return v;
     }
 
 }
@@ -158,6 +165,7 @@ function windowResize(e:UIEvent) {
 
 function mouseDown(e: MouseEvent) {
     threeObj.onMouseDown(e);
+    var something = threeObj.spaceToScreen(threeObj.flock.boids[0].sinkV);
 }
 
 function mouseMove(e: MouseEvent) {

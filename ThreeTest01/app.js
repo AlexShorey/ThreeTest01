@@ -25,7 +25,6 @@ var UpdateHook = (function () {
     return UpdateHook;
 })();
 var ThreeObj = (function () {
-    //otherlight: THREE.PointLight;
     function ThreeObj() {
         var _this = this;
         this.width = window.innerWidth;
@@ -41,27 +40,23 @@ var ThreeObj = (function () {
         //this.element.appendChild(this.renderer.domElement);
         document.body.appendChild(this.renderer.domElement);
         this.renderer.domElement.id = "glid";
-        ///this.renderer.domElement.id = ....
-        this.theCube = new ThreeCube();
         this.flock = new Flock();
         this.flock.camera = this.camera;
-        this.flock.boids.forEach(function (b) {
-            _this.scene.add(b.mesh);
-        });
-        //this.theCube.startUpdating();
-        this.scene.add(this.theCube.mesh);
+        this.theCube = new ThreeCube();
         this.theLight = new THREE.PointLight(0xffffff);
         this.theLight.position.y = 300;
         this.theLight.position.z = 500;
+        this.scene.add(this.theCube.mesh);
         this.scene.add(this.theLight);
-        this.mouseV = new THREE.Vector3(0, 0, 0.5);
-        //window.onresize = (e) => this.onResize(e);
-            }
+        this.flock.boids.forEach(function (b) {
+            _this.scene.add(b.mesh);
+        });
+    }
     ThreeObj.prototype.onMouseDown = function (e) {
         this.flock.mDown(e);
     };
     ThreeObj.prototype.onMouseMove = function (e) {
-        this.theCube.mesh.position = this.mouseToCamSpace(new THREE.Vector3(e.x, e.y, 0.5), 300);
+        this.theCube.mesh.position = this.screenToSpace(new THREE.Vector3(e.x, e.y, 0.5), 300);
         this.flock.mMove(e);
     };
     ThreeObj.prototype.onMouseUp = function (e) {
@@ -83,13 +78,22 @@ var ThreeObj = (function () {
             return _this.draw();
         });
     };
-    ThreeObj.prototype.mouseToCamSpace = function (m, d) {
+    ThreeObj.prototype.screenToSpace = function (m, d) {
         m = new THREE.Vector3(2 * m.x / window.innerWidth - 1, 2 * -m.y / window.innerHeight + 1, m.z);
         m = this.projector.unprojectVector(m, this.camera);
         m.subVectors(m, this.camera.position);
         m.normalize();
         m.addVectors(this.camera.position, m.multiplyScalar(d));
         return m;
+    };
+    ThreeObj.prototype.spaceToScreen = function (v) {
+        //v = v.subVectors(this.camera.position, v);
+        v = this.projector.projectVector(v, this.camera);
+        v.x = v.x * window.innerWidth / 2 + window.innerWidth / 2;
+        v.y = window.innerHeight - (v.y * window.innerHeight / 2 + window.innerHeight / 2);
+        v.z = 0;
+        console.log(v);
+        return v;
     };
     return ThreeObj;
 })();
@@ -131,6 +135,7 @@ function windowResize(e) {
 }
 function mouseDown(e) {
     threeObj.onMouseDown(e);
+    var something = threeObj.spaceToScreen(threeObj.flock.boids[0].sinkV);
 }
 function mouseMove(e) {
     threeObj.onMouseMove(e);
