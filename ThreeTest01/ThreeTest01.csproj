@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{46BD1B2B-5BC3-458B-96CE-147E13551EEF}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="app.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BoidTracker.ts" />
+    <Content Include="default.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="app.js">
+      <DependentUpon>app.ts</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <TypeScriptCompile Include="Flock.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <Content Include="Flock.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="GreenSock\easing\EasePack.min.js" />
+    <Content Include="GreenSock\greensock.d.ts" />
+    <Content Include="GreenSock\jquery.gsap.min.js" />
+    <Content Include="GreenSock\plugins\AttrPlugin.min.js" />
+    <Content Include="GreenSock\plugins\BezierPlugin.min.js" />
+    <Content Include="GreenSock\plugins\ColorPropsPlugin.min.js" />
+    <Content Include="GreenSock\plugins\CSSPlugin.min.js" />
+    <Content Include="GreenSock\plugins\CSSRulePlugin.min.js" />
+    <Content Include="GreenSock\plugins\DirectionalRotationPlugin.min.js" />
+    <Content Include="GreenSock\plugins\EaselPlugin.min.js" />
+    <Content Include="GreenSock\plugins\RaphaelPlugin.min.js" />
+    <Content Include="GreenSock\plugins\RoundPropsPlugin.min.js" />
+    <Content Include="GreenSock\plugins\ScrollToPlugin.min.js" />
+    <Content Include="GreenSock\plugins\TextPlugin.min.js" />
+    <Content Include="GreenSock\TimelineLite.min.js" />
+    <Content Include="GreenSock\TimelineMax.min.js" />
+    <Content Include="GreenSock\TweenLite.min.js" />
+    <Content Include="GreenSock\TweenMax.min.js" />
+    <Content Include="Three\three.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="app.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GreenSock\.DS_Store" />
+    <Content Include="GreenSock\plugins\.DS_Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Three\three.min.js" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>ThreeTest01</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'deviceTest'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57941</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:51363/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptIncludeComments>false</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
+</Project>
