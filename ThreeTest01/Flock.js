@@ -101,34 +101,23 @@ var Boid = (function () {
         this.applyForce(new THREE.Vector3(-0.012, -0.012, -0.012));
         //*****************************************************************
         if(this.isPressed) {
-            //var snk = this.sink(this.sinkV);
-            //var snk = this.sink(new THREE.Vector3(0, 0, 0));
-            //this.applyForce(snk);
             this.applyForce(this.sink(this.sinkV));
         }
     };
     Boid.prototype.update = function () {
-        //if (this.isPressed)
-        //  this.acceleration.add(this.sink(new THREE.Vector3(0, 0, 0)));
         this.velocity.add(this.acceleration);
         if(this.velocity.length() > this.maxspeed) {
             this.velocity.setLength(this.maxspeed);
         }
+        // clamp doesn't do what i thought it did
         //this.velocity.clamp(new THREE.Vector3(0, 0, 0),
         //                   new THREE.Vector3(this.maxspeed, this.maxspeed, this.maxspeed));
-        /*
-        if (this.isPressed) {
-        this.velocity.add(this.sink(new THREE.Vector3(0, 0, 0)));
-        console.log("hit");
-        }
-        */
         this.location.add(this.velocity);
         this.acceleration.multiplyScalar(0);
     };
     Boid.prototype.seek = function (target) {
         var desired = new THREE.Vector3();
         desired.subVectors(target, this.location);
-        //var desired = target.sub(this.location);
         desired.normalize();
         desired.multiplyScalar(this.maxspeed);
         var steer = new THREE.Vector3();
@@ -137,8 +126,6 @@ var Boid = (function () {
         return steer;
     };
     Boid.prototype.render = function () {
-        //var lookDir = new THREE.Vector3();
-        //this.velocity.copy(lookDir);
         this.mesh.position = this.location;
         this.mesh.lookAt(new THREE.Vector3().addVectors(this.mesh.position, this.velocity));
     };

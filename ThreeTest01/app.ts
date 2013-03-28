@@ -123,7 +123,6 @@ class ThreeObj {
         v.x = v.x * window.innerWidth/2 + window.innerWidth/2;
         v.y = window.innerHeight - (v.y * window.innerHeight / 2 + window.innerHeight / 2);
         v.z = 0;
-        console.log(v);
         return v;
     }
 
@@ -142,6 +141,11 @@ class ThreeCube {
     }
 }
 
+//reference inclusions
+document.writeln("<script src='TargetReticle.js'></script>");
+document.writeln("<script src='Three/three.min.js'></script>");
+document.writeln("<script src='Flock.js'></script>");
+
 var hook: UpdateHook;
 var threeObj: ThreeObj;
 var tgt: TargetReticle;
@@ -151,6 +155,9 @@ window.onload = () => {
     include dependencies exclusively from javascript.
     Doesn't work yet because objects are declared before 
     resources are referenced.
+
+    FIXED: see above. document.writeln(""); can accomplish references
+    before object instantiation occurs.
 
     var ref = <HTMLScriptElement>document.createElement("script");
     ref.type = 'text/javascript';
@@ -165,7 +172,7 @@ window.onload = () => {
     threeObj = new ThreeObj();
     threeObj.draw();
 
-    tgt = new TargetReticle();
+    tgt = new TargetReticle(threeObj.camera);
     
 
     //set global even subscribers
@@ -178,8 +185,8 @@ window.onload = () => {
 };
 
 function updateElements() {
-    tgt.setPos(threeObj.spaceToScreen(threeObj.flock.boids[100].mesh.position.clone()));
-
+    //tgt.setPos(threeObj.spaceToScreen(threeObj.flock.boids[100].mesh.position.clone()));
+    tgt.setPosM(threeObj.flock.boids[100].mesh.matrix);
     window.requestAnimationFrame(() => updateElements());
 }
 
@@ -201,3 +208,4 @@ function mouseMove(e: MouseEvent) {
 function mouseUp(e: MouseEvent) {
     threeObj.onMouseUp(e);
 }
+
