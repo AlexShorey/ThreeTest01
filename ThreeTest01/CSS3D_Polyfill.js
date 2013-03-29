@@ -16,3 +16,9 @@ function CSS3D_PerspectiveOrigin(s, fill) {
     s.MozPerspectiveOrigin = fill;
     return s;
 }
+
+function CSS3D_TransformStyle(s, fill) {
+    s.WebkitTransformStyle = fill;
+    s.MozTransformStyle = fill;
+    return s;
+}

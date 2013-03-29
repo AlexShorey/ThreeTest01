@@ -6,25 +6,50 @@ var TargetReticle = (function () {
         this.height = 64;
         this.camera = cam;
         this.divWorld = document.createElement('div');
-        this.divWorld.style = CSS3D_Perspective(this.divWorld.style, camToCSSFov(this.camera.fov) + 'px');
+        this.divWorld.style.top = '0px';
+        this.divWorld.style.left = '0px';
+        this.divWorld.style.margin = '0px';
+        this.divWorld.style.width = window.innerWidth + "px";
+        this.divWorld.style.height = window.innerHeight + "px";
+        this.divWorld.style = CSS3D_Perspective(this.divWorld.style, camToCSSFov(this.camera.fov) + "px");
+        this.divWorld.style.position = 'absolute';
+        this.divWorld.style = CSS3D_PerspectiveOrigin(this.divWorld.style, "50% 50%");
+        this.divWorld.style = CSS3D_TransformStyle(this.divWorld.style, "preserve-3d");
         this.divWorld.style.zIndex = '1001';
         this.divCamera = document.createElement('div');
+        this.divCamera.style = CSS3D_Perspective(this.divCamera.style, camToCSSFov(this.camera.fov) * 300 + "px");
+        this.divCamera.style.position = 'absolute';
+        this.divCamera.style.margin = '0px';
+        this.divCamera.style.padding = '0px';
+        this.divCamera.style.left = '0px';
+        this.divCamera.style.top = '0px';
+        this.divCamera.style.width = window.innerWidth + "px";
+        this.divCamera.style.height = window.innerHeight + "px";
+        this.divCamera.style = CSS3D_PerspectiveOrigin(this.divCamera.style, "0% 0%");
         this.divCamera.style = CSS3D_Transform(this.divCamera.style, this.getCSS3D_cameraStyle(this.camera, camToCSSFov(this.camera.fov)));
+        this.divCamera.style = CSS3D_TransformStyle(this.divCamera.style, "preserve-3d");
         this.elm = document.createElement('div');
+        this.elm.style = CSS3D_Perspective(this.elm.style, camToCSSFov(this.camera.fov) * 10 + "px");
         this.elm.style.position = "absolute";
-        this.elm.style.margin = '0px';
-        this.elm.style.padding = '0px';
-        this.elm.style.width = this.width.toString() + 'px';
-        this.elm.style.height = this.height.toString() + 'px';
+        this.elm.style.width = this.width + 'px';
+        this.elm.style.height = this.height + 'px';
         this.elm.style.background = 'rgba(38,255,0,0.2)';
+        //this.elm.style = CSS3D_Transform(this.elm.style, "translate()");
         //document.body.style = CSS3D_Perspective(document.body.style, camToCSSFov(this.camera.fov) + "px");
         //this.elm.style = CSS3D_Transform(this.elm.style, "rotate(45deg)");
-        this.position = new THREE.Vector3(0, 0, 0);
+        //this.position = new THREE.Vector3(0, 0, 0);
         //document.body.appendChild(this.elm);
         document.body.appendChild(this.divWorld);
         this.divWorld.appendChild(this.divCamera);
         this.divCamera.appendChild(this.elm);
     }
+    TargetReticle.prototype.onResize = function () {
+        this.divWorld.style.width = window.innerWidth + "px";
+        this.divWorld.style.height = window.innerHeight + "px";
+        this.divCamera.style.width = window.innerWidth + "px";
+        this.divCamera.style.height = window.innerHeight + "px";
+        this.divCamera.style = CSS3D_Transform(this.divCamera.style, this.getCSS3D_cameraStyle(this.camera, camToCSSFov(this.camera.fov)));
+    };
     TargetReticle.prototype.setPos = function (v) {
         //this.elm.style.transform = "rotate(" + this.increment + ")";
         //this.elm.style.transform += "translateZ(" + this.increment + "px) ";
@@ -33,6 +58,8 @@ var TargetReticle = (function () {
     TargetReticle.prototype.setPosM = function (m) {
         //this.elm.style.transform = "";
         this.elm.style = CSS3D_Transform(this.elm.style, toCSSMatrix(m, false));
+        this.divCamera.style = CSS3D_Transform(this.divCamera.style, this.getCSS3D_cameraStyle(this.camera, camToCSSFov(this.camera.fov)));
+        //this.elm.style = CSS3D_Transform(this.elm.style, "translate3d(-300px, -100px, 0px)");
         //console.log(this.elm.style.transform.toString());
             };
     TargetReticle.prototype.setCSSCamera = function (cam, fov) {
@@ -110,7 +137,7 @@ function toCSSMatrix(threeMat4, b) {
             a.elements[11], 
             a.elements[12], 
             a.elements[13], 
-            a.elements[14], 
+            a.elements[14] + 100, 
             a.elements[15]
         ];
     }
@@ -118,6 +145,16 @@ function toCSSMatrix(threeMat4, b) {
         f[e] = epsilon(f[e]);
     }
     return "matrix3d(" + f.join(",") + ")";
+}
+function setDivPosition(s, glo) {
+}
+function CSStransform(width, height, matrix) {
+    var scale = 1;
+    return [
+        toCSSMatrix(matrix, false), 
+        "scale3d(1,1,1)", 
+        "translate3d(" + epsilon(-0.5 * width) + "px," + epsilon(-0.5 * height) + "px,0"
+    ].join(" ");
 }
 function epsilon(a) {
     if(Math.abs(a) < 0.000001) {

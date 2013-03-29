@@ -187,12 +187,13 @@ window.onload = () => {
 
 function updateElements() {
     //tgt.setPos(threeObj.spaceToScreen(threeObj.flock.boids[100].mesh.position.clone()));
-    tgt.setPosM(threeObj.flock.boids[100].mesh.matrix);
+    tgt.setPosM(threeObj.flock.boids[0].mesh.matrix);
     window.requestAnimationFrame(() => updateElements());
 }
 
 function windowResize(e:UIEvent) {
     threeObj.onResize(e);
+    tgt.onResize();
     //var skizzle = document.getElementById('tRet');
     //console.log('target top: ' + skizzle.style.top);
 }
