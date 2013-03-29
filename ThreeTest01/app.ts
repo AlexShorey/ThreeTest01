@@ -145,6 +145,7 @@ class ThreeCube {
 document.writeln("<script src='TargetReticle.js'></script>");
 document.writeln("<script src='Three/three.min.js'></script>");
 document.writeln("<script src='Flock.js'></script>");
+document.writeln("<script src='CSS3D_Polyfill.js'></script>");
 
 var hook: UpdateHook;
 var threeObj: ThreeObj;
@@ -192,8 +193,8 @@ function updateElements() {
 
 function windowResize(e:UIEvent) {
     threeObj.onResize(e);
-    var skizzle = document.getElementById('tRet');
-    console.log('target top: ' + skizzle.style.top);
+    //var skizzle = document.getElementById('tRet');
+    //console.log('target top: ' + skizzle.style.top);
 }
 
 function mouseDown(e: MouseEvent) {

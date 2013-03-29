@@ -20,6 +20,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BoidTracker.ts" />
+    <Content Include="CSS3D_Polyfill.d.ts" />
+    <Content Include="CSS3D_Polyfill.js" />
     <Content Include="default.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -98,7 +100,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57941</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51363/</IISUrl>
+          <IISUrl>http://localhost:51364/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

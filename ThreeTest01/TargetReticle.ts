@@ -1,61 +1,65 @@
 ///<reference path='Three/three.d.ts' />
+///<reference path='CSS3D_Polyfill.d.ts' />
 
 class TargetReticle {
     doc: HTMLDocument;
+
+    divWorld: HTMLElement;
+    divCamera: HTMLElement;
     elm: HTMLElement;
+
     position: THREE.Vector3;
     width;
     height;
     camera: THREE.PerspectiveCamera;
 
-    increment: number;
-
     constructor(cam: THREE.PerspectiveCamera) {
         this.width = 64;
         this.height = 64;
-
         this.camera = cam;
 
-        this.elm = document.createElement('div');
-        this.elm.id = 'tRet';
+        this.divWorld = document.createElement('div');
+        this.divWorld.style = CSS3D_Perspective(this.divWorld.style, camToCSSFov(this.camera.fov) + 'px');
+        this.divWorld.style.zIndex = '1001';
 
+        this.divCamera = document.createElement('div');
+        this.divCamera.style = CSS3D_Transform(this.divCamera.style,
+            this.getCSS3D_cameraStyle(this.camera, camToCSSFov(this.camera.fov)));
+        
+        this.elm = document.createElement('div');
         this.elm.style.position = "absolute";
         this.elm.style.margin = '0px';
         this.elm.style.padding = '0px';
         this.elm.style.width = this.width.toString() + 'px';
         this.elm.style.height = this.height.toString() + 'px';
-        this.elm.style.top = '0px';
-        this.elm.style.left = '0px';
         this.elm.style.background = 'rgba(38,255,0,0.2)';
-        this.elm.style.perspective = camToCSSFov(cam.fov) + "px";
-        this.elm.style.transform = 'rotateX(45deg);'
-
+        
+        //document.body.style = CSS3D_Perspective(document.body.style, camToCSSFov(this.camera.fov) + "px");
+        //this.elm.style = CSS3D_Transform(this.elm.style, "rotate(45deg)");
         this.position = new THREE.Vector3(0, 0, 0);
-        this.increment = 0;
-        document.body.appendChild(this.elm);
+        //document.body.appendChild(this.elm);
+        document.body.appendChild(this.divWorld);
+        this.divWorld.appendChild(this.divCamera);
+        this.divCamera.appendChild(this.elm);
     }
 
     setPos(v: THREE.Vector3) {
-        //this.elm.style.left = (v.x - this.width/2).toString() + 'px';
-        //this.elm.style.top = (v.y - this.height / 2).toString() + 'px';
-
-        this.increment++;
-        //this.elm.style.left = (this.increment % 512).toString() + "px";
-        //this.elm.style.top = (this.increment % 512).toString() + "px";
         
-        this.elm.style.transform = "rotate(" + this.increment + ")";
-        this.elm.style.transform += "translateZ(" + this.increment + "px) ";
+        //this.elm.style.transform = "rotate(" + this.increment + ")";
+        //this.elm.style.transform += "translateZ(" + this.increment + "px) ";
+        this.setCSSCamera(this.camera, camToCSSFov(this.camera.fov));
     }
 
     setPosM(m: THREE.Matrix4) {
-        this.elm.style.transform = "";
-        this.elm.style.transform += toCSSMatrix(m, false);
-        console.log(this.elm.style.transform.toString());
+        //this.elm.style.transform = "";
+        this.elm.style = CSS3D_Transform(this.elm.style, toCSSMatrix(m, false));
+        //console.log(this.elm.style.transform.toString());
     }
 
     setCSSCamera(cam: THREE.PerspectiveCamera, fov: number) {
         var camStyle = this.getCSS3D_cameraStyle(this.camera, camToCSSFov(this.camera.fov));
         //this.elm.style = camStyle;
+        document.body.style = CSS3D_Transform(document.body.style, camStyle);
     }
 
     getCSS3D() {

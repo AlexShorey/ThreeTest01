@@ -111,6 +111,7 @@ var ThreeCube = (function () {
 document.writeln("<script src='TargetReticle.js'></script>");
 document.writeln("<script src='Three/three.min.js'></script>");
 document.writeln("<script src='Flock.js'></script>");
+document.writeln("<script src='CSS3D_Polyfill.js'></script>");
 var hook;
 var threeObj;
 var tgt;
@@ -158,9 +159,9 @@ function updateElements() {
 }
 function windowResize(e) {
     threeObj.onResize(e);
-    var skizzle = document.getElementById('tRet');
-    console.log('target top: ' + skizzle.style.top);
-}
+    //var skizzle = document.getElementById('tRet');
+    //console.log('target top: ' + skizzle.style.top);
+    }
 function mouseDown(e) {
     threeObj.onMouseDown(e);
     var something = threeObj.spaceToScreen(threeObj.flock.boids[0].sinkV);
