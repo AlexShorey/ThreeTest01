@@ -8,7 +8,7 @@ var Flock = (function () {
             color: 0xFF0000
         });
         this.projector = new THREE.Projector();
-        for(var i = 0; i < 1; i++) {
+        for(var i = 0; i < 3; i++) {
             this.boids.push(new Boid((Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400, (Math.random() - 0.5) * 400));
         }
         this.boids.forEach(function (b) {

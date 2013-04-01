@@ -4,6 +4,7 @@
 class TargetReticle {
     doc: HTMLDocument;
 
+    divContainer: HTMLElement;
     divWorld: HTMLElement;
     divCamera: HTMLElement;
     elm: HTMLElement;
@@ -18,7 +19,15 @@ class TargetReticle {
         this.height = 64;
         this.camera = cam;
 
+        this.divContainer = document.createElement('div');
+        this.divContainer.style.position = 'absolute';
+        this.divContainer.style.margin = '0px';
+        this.divContainer.style.padding = '0px';
+        this.divContainer.style = CSS3D_TransformStyle(this.divContainer.style, 'preserve-3d');
+
+
         this.divWorld = document.createElement('div');
+        //this.divWorld.style.position = 'absolute';
         this.divWorld.style.top = '0px';
         this.divWorld.style.left = '0px';
         this.divWorld.style.margin = '0px';
@@ -29,7 +38,7 @@ class TargetReticle {
         this.divWorld.style.position = 'absolute';
         this.divWorld.style = CSS3D_PerspectiveOrigin(this.divWorld.style, "50% 50%");
         this.divWorld.style = CSS3D_TransformStyle(this.divWorld.style, "preserve-3d");
-        this.divWorld.style.zIndex = '1001';
+        this.divWorld.style.zIndex = '20';
 
         
         this.divCamera = document.createElement('div');
@@ -42,11 +51,11 @@ class TargetReticle {
         this.divCamera.style.width = window.innerWidth + "px";
         this.divCamera.style.height = window.innerHeight + "px";
         this.divCamera.style = CSS3D_PerspectiveOrigin(this.divCamera.style, "0% 0%");
-        this.divCamera.style = CSS3D_Transform(this.divCamera.style, this.getCSS3D_cameraStyle(this.camera, camToCSSFov(this.camera.fov)));
-        this.divCamera.style = CSS3D_TransformStyle(this.divCamera.style, "preserve-3d");
+        this.divCamera.style = CSS3D_Transform(this.divCamera.style, this.getCSS3D_cameraStyle(cam, camToCSSFov(this.camera.fov)));
+        //this.divCamera.style = CSS3D_TransformStyle(this.divCamera.style, "preserve-3d");
         
         this.elm = document.createElement('div');
-        this.elm.style = CSS3D_Perspective(this.elm.style, camToCSSFov(this.camera.fov) * 10 + "px");
+        this.elm.style = CSS3D_Perspective(this.elm.style, camToCSSFov(this.camera.fov) + "px");
         this.elm.style.position = "absolute";
         this.elm.style.width = this.width + 'px';
         this.elm.style.height = this.height + 'px';
@@ -57,7 +66,8 @@ class TargetReticle {
         //this.elm.style = CSS3D_Transform(this.elm.style, "rotate(45deg)");
         //this.position = new THREE.Vector3(0, 0, 0);
         //document.body.appendChild(this.elm);
-        document.body.appendChild(this.divWorld);
+        document.body.appendChild(this.divContainer);
+        this.divContainer.appendChild(this.divWorld);
         this.divWorld.appendChild(this.divCamera);
         this.divCamera.appendChild(this.elm);
     }
